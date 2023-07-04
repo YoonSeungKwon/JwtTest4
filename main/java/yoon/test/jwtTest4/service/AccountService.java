@@ -1,19 +1,15 @@
 package yoon.test.jwtTest4.service;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import yoon.test.jwtTest4.config.AccountAutheticationProvider;
 import yoon.test.jwtTest4.entity.Account;
 import yoon.test.jwtTest4.enums.Role;
-import yoon.test.jwtTest4.jwt.JwtProvider;
 import yoon.test.jwtTest4.repository.AccountRepository;
 import yoon.test.jwtTest4.vo.request.AccountDto;
 import yoon.test.jwtTest4.vo.response.AccountResponse;

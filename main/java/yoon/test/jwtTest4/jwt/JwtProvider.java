@@ -1,16 +1,13 @@
 package yoon.test.jwtTest4.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import yoon.test.jwtTest4.entity.Account;
 import yoon.test.jwtTest4.service.AccountDetailService;
 import yoon.test.jwtTest4.vo.response.AccountResponse;
 
@@ -25,7 +22,7 @@ public class JwtProvider {
 
     private final AccountDetailService accountDetailService;
 
-    public String createToken(AccountResponse accout){
+    public String createToken(AccountResponse account){
 
         Claims claims = Jwts.claims();
         claims
@@ -33,11 +30,11 @@ public class JwtProvider {
                 .setSubject("AccessToken")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() +exp));
-        claims.put("idx", accout.getIdx());
-        claims.put("email", accout.getEmail());
-        claims.put("name", accout.getName());
-        claims.put("role", accout.getRole());
-        claims.put("regdate", String.valueOf(accout.getRegdate()));
+        claims.put("idx", account.getIdx());
+        claims.put("email", account.getEmail());
+        claims.put("name", account.getName());
+        claims.put("role", account.getRole());
+        claims.put("regdate", String.valueOf(account.getRegdate()));
 
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JSON")
@@ -56,22 +53,15 @@ public class JwtProvider {
 
     public String getId(String token){                                     //get Id From Token
 
-        return (String)Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJwt(token).getBody().get("email");
+        return (String)Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().get("email");
     }
 
     public boolean validateToken(String token){                             //Validate Check
         try{
-            Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-            return !claims.getBody().getExpiration().before(new Date());
+            Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+            return !claims.getExpiration().before(new Date());
         }catch(Exception e){
             return false;
         }
-    }
-
-    public String resolveToken(HttpServletRequest request){                 //get Token From Request
-        if(request.getHeader("authorization") != null ) {
-            return request.getHeader("authorization");
-        }
-        return null;
     }
 }
