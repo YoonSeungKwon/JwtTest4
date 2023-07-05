@@ -18,7 +18,7 @@ import yoon.test.jwtTest4.vo.response.AccountResponse;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private final AccountAutheticationProvider autheticationProvider;
+    private final AccountAutheticationProvider authenticationProvider;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
     public Account findAccount(AccountDto dto){
@@ -36,7 +36,7 @@ public class AccountService {
 
         accountRepository.save(account);
 
-        return this.toResponse(account);
+        return toResponse(account);
     }
 
 
@@ -53,7 +53,7 @@ public class AccountService {
     public AccountResponse login(AccountDto dto) {
 
         try{
-            Authentication authentication = autheticationProvider.authenticate(new UsernamePasswordAuthenticationToken(
+            Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(
                     dto.getEmail(), dto.getPassword()
             ));
             SecurityContextHolder.getContext().setAuthentication(authentication);
